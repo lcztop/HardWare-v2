@@ -227,7 +227,7 @@ Page({
       })
       categories = categories.concat(_categories)
       
-      for(var i = 0; i<5; i++){
+      for(var i = 0; i<2; i++){
         categoriesTop5[i] = categories[i]
       }
       console.log(categoriesTop5)
