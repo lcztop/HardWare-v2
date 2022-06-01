@@ -49,7 +49,7 @@
   </van-grid>
   <van-cell wx:if="{{ cps_open == '1' }}" title="CPS订单" value="管理" is-link url="/packageCps/pages/order-list/cps" />
   <van-cell wx:if="{{ recycle_open == '1' }}" title="回收订单" value="管理" is-link url="/pages/recycle/orders" />
-  <van-cell title="常用功能" />
+  <!-- <van-cell title="常用功能" />
   <van-grid clickable>
     <van-grid-item wx:if="{{canHX}}" icon="scan" text="扫码核销" bind:click="scanOrderCode" />
     <van-grid-item icon="paid" text="优惠买单" url="/pages/maidan/index" />
@@ -58,7 +58,7 @@
     <van-grid-item icon="bill-o" text="开票记录" url="/pages/invoice/list" />
     <van-grid-item icon="coupon-o" text="优惠券" url="/pages/coupons/index" link-type="switchTab" />
     <van-grid-item wx:if="{{ show_score_sign == 1 }}" icon="calendar-o" text="签到赚积分" url="/pages/sign/index" />
-  </van-grid>
+  </van-grid> -->
   <!-- 老样式 -->
   <view class="container">
     <block wx:if="{{apiUserInfoMap.peisongMember && apiUserInfoMap.peisongMember.type != 0}}">

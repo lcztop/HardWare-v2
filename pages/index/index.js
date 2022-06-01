@@ -13,6 +13,7 @@ Page({
     loadingHidden: false, // loading
     selectCurrent: 0,
     categories: [],
+    categoriesTop5: [],
     goods: [],
     loadingMoreHidden: true,
     coupons: [],
@@ -219,14 +220,21 @@ Page({
   async categories(){
     const res = await WXAPI.goodsCategory()
     let categories = [];
+    let categoriesTop5 = [];
     if (res.code == 0) {
       const _categories = res.data.filter(ele => {
         return ele.level == 1
       })
       categories = categories.concat(_categories)
+      
+      for(var i = 0; i<5; i++){
+        categoriesTop5[i] = categories[i]
+      }
+      console.log(categoriesTop5)
     }
     this.setData({
-      categories: categories,
+      categories,
+      categoriesTop5,
       curPage: 1
     });
     this.getGoodsList(0);
