@@ -211,3 +211,4 @@ module.exports = {
     <van-icon custom-class="close" name="close" size="64rpx" color="#fff" bind:click="closeAdPositionIndexPop" />
   </view>
 </van-overlay>
+
