@@ -36,9 +36,9 @@
     "showES6CompileOption": false
   },
   "compileType": "miniprogram",
-  "libVersion": "2.24.6",
+  "libVersion": "2.22.1",
   "appid": "wx85cdf8d52a4e00e2",
-  "projectname": "HomeHome%E5%95%86%E5%9F%8E",
+  "projectname": "HomeHome商城",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "packOptions": {

@@ -17,7 +17,6 @@ Page({
     })
   },
   getPhoneNumber: function(e) {
-    console.log(e)
     if (!e.detail.errMsg || e.detail.errMsg != "getPhoneNumber:ok") {
       wx.showModal({
         title: '提示',

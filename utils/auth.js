@@ -1,6 +1,5 @@
 const WXAPI = require('apifm-wxapi')
 import Dialog from '@vant/weapp/dialog/dialog'
-import { code128 } from '../miniprogram_npm/wxbarcode'
 
 async function checkSession(){
   return new Promise((resolve, reject) => {
@@ -142,8 +141,7 @@ async function getSession(code){
 async function authorize() {
   
   const code1 = await wxaCode()
-  console.log(code1)
-  const session = await getSession(code)
+  const session = await getSession(code1)
   console.log(session.data)
   const code2 = await wxaCode()
   const resLogin = await WXAPI.login_wx(code2)
@@ -153,6 +151,58 @@ async function authorize() {
     wx.setStorageSync('uid', resLogin.data.uid)
     return resLogin
   }
+  // return new Promise((resolve, reject) => {
+  //   wx.login({
+  //     success: function (res) {
+  //       const code = res.code
+  //       let referrer = '' // 推荐人
+  //       let referrer_storge = wx.getStorageSync('referrer');
+  //       if (referrer_storge) {
+  //         referrer = referrer_storge;
+  //       }
+  //       // 下面开始调用注册接口
+  //       const extConfigSync = wx.getExtConfigSync()
+  //       if (extConfigSync.subDomain) {
+  //         WXAPI.wxappServiceAuthorize({
+  //           code: code,
+  //           referrer: referrer
+  //         }).then(function (res) {
+  //           if (res.code == 0) {
+  //             wx.setStorageSync('token', res.data.token)
+  //             wx.setStorageSync('uid', res.data.uid)
+  //             resolve(res)
+  //           } else {
+  //             wx.showToast({
+  //               title: res.msg,
+  //               icon: 'none'
+  //             })
+  //             reject(res.msg)
+  //           }
+  //         })
+  //       } else {
+  //         WXAPI.authorize({
+  //           code: code,
+  //           referrer: referrer
+  //         }).then(function (res) {
+  //           if (res.code == 0) {
+  //             wx.setStorageSync('token', res.data.token)
+  //             wx.setStorageSync('uid', res.data.uid)
+  //             resolve(res)
+  //           } else {
+  //             wx.showToast({
+  //               title: res.msg,
+  //               icon: 'none'
+  //             })
+  //             reject(res.msg)
+  //           }
+  //         })
+  //       }
+  //     },
+  //     fail: err => {
+  //       reject(err)
+  //     }
+  //   })
+  // })
 }
 
 function loginOut(){
