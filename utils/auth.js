@@ -1,5 +1,6 @@
 const WXAPI = require('apifm-wxapi')
 import Dialog from '@vant/weapp/dialog/dialog'
+import { code128 } from '../miniprogram_npm/wxbarcode'
 
 async function checkSession(){
   return new Promise((resolve, reject) => {
@@ -140,17 +141,18 @@ async function getSession(code){
 }
 async function authorize() {
   
-  const code = await wxaCode()
-  console.log(code)
+  const code1 = await wxaCode()
+  console.log(code1)
   const session = await getSession(code)
   console.log(session.data)
-  // const resLogin = await WXAPI.login_wx(code)
-  // console.log(resLogin)
-  // if (resLogin.code == 0) {
-  //   wx.setStorageSync('token', resLogin.data.token)
-  //   wx.setStorageSync('uid', resLogin.data.uid)
-  //   return resLogin
-  // }
+  const code2 = await wxaCode()
+  const resLogin = await WXAPI.login_wx(code2)
+  console.log(resLogin)
+  if (resLogin.code == 0) {
+    wx.setStorageSync('token', resLogin.data.token)
+    wx.setStorageSync('uid', resLogin.data.uid)
+    return resLogin
+  }
 }
 
 function loginOut(){
