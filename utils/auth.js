@@ -120,69 +120,37 @@ async function login(page){
     }
   })
 }
-
-async function authorize() {
-  
-  const code = await wxaCode()
-  const resLogin = await WXAPI.login_wx(code)
-
-  if (resLogin.code == 0) {
-    wx.setStorageSync('token', resLogin.data.token)
-    wx.setStorageSync('uid', resLogin.data.uid)
-    return resLogin
-  }
+async function getSession(code){
   return new Promise((resolve, reject) => {
-    wx.login({
-      success: function (res) {
-        const code = res.code
-        let referrer = '' // 推荐人
-        let referrer_storge = wx.getStorageSync('referrer');
-        if (referrer_storge) {
-          referrer = referrer_storge;
-        }
-        // 下面开始调用注册接口
-        const extConfigSync = wx.getExtConfigSync()
-        if (extConfigSync.subDomain) {
-          WXAPI.wxappServiceAuthorize({
-            code: code,
-            referrer: referrer
-          }).then(function (res) {
-            if (res.code == 0) {
-              wx.setStorageSync('token', res.data.token)
-              wx.setStorageSync('uid', res.data.uid)
-              resolve(res)
-            } else {
-              wx.showToast({
-                title: res.msg,
-                icon: 'none'
-              })
-              reject(res.msg)
-            }
-          })
-        } else {
-          WXAPI.authorize({
-            code: code,
-            referrer: referrer
-          }).then(function (res) {
-            if (res.code == 0) {
-              wx.setStorageSync('token', res.data.token)
-              wx.setStorageSync('uid', res.data.uid)
-              resolve(res)
-            } else {
-              wx.showToast({
-                title: res.msg,
-                icon: 'none'
-              })
-              reject(res.msg)
-            }
-          })
-        }
+    console.log(code)
+    wx.request({
+      url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/cas/homehome/register',
+      data:{
+        'code': code
       },
-      fail: err => {
-        reject(err)
+      method:'POST',
+      success: function(res){
+        return resolve(res)
+      },
+      fail: function(res){
+        return resolve(res)
       }
     })
   })
+}
+async function authorize() {
+  
+  const code = await wxaCode()
+  console.log(code)
+  const session = await getSession(code)
+  console.log(session.data)
+  // const resLogin = await WXAPI.login_wx(code)
+  // console.log(resLogin)
+  // if (resLogin.code == 0) {
+  //   wx.setStorageSync('token', resLogin.data.token)
+  //   wx.setStorageSync('uid', resLogin.data.uid)
+  //   return resLogin
+  // }
 }
 
 function loginOut(){

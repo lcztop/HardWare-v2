@@ -2,6 +2,7 @@ const WXAPI = require('apifm-wxapi')
 const AUTH = require('../../utils/auth')
 const TOOLS = require('../../utils/tools.js')
 
+
 Page({
 	data: {
     balance:0.00,
@@ -28,6 +29,7 @@ Page({
     }
 	},
   onShow() {
+    
     const _this = this
     AUTH.checkHasLogined().then(isLogined => {
       if (isLogined) {

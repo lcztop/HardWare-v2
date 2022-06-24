@@ -189,9 +189,6 @@ Page({
     }
     this.setData(_data)
   },
-  getPhoneNumber (e) {
-    console.log(e)
-  },
   onShow: function(e){
     
     this.setData({

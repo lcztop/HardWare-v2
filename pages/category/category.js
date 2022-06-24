@@ -37,7 +37,29 @@ Page({
     wx.showLoading({
       title: '',
     })
+    
     const res = await WXAPI.goodsCategory()
+    // const res = {
+    //   msg: "success",
+    //   code: 0,
+    //   data:[
+    //     {
+    //       'id': "001",
+    //       'isUse': true,
+    //       'level': 1,
+    //       'name': '得力工具一',
+    //       'paixu': 0,
+
+    //     },
+    //     {
+    //       'id': "002",
+    //       'isUse': true,
+    //       'level': 1,
+    //       'name': '得力工具二',
+    //       'paixu': 1,
+    //     }
+    //   ]
+    // }
     wx.hideLoading()
     let activeCategory = 0
     let categorySelected = this.data.categorySelected
@@ -90,6 +112,39 @@ Page({
       categoryId = this.data.categorySelected.id
     }
     // https://www.yuque.com/apifm/nu0f75/wg5t98
+    
+    let that = this
+    // wx.request({
+    //   url: 'https://erp.yslcloud.com/process.aspx?action=load_dispgrid&pwd=480074992&billType=PRODUCT|0&incChild=true&parentId=11246115&sort=id&dir=ASC&incDisabled=false&start=0&limit=20&recCount=-1',
+    //   header:{
+    //     jq:1
+    //   },
+    //   success: function(res2){
+    //     let data = res2.data.tbl
+    //     console.log(data)
+    //     // if (res.code != 0) {
+    //     //   wx.showToast({
+    //     //     title: res.msg,
+    //     //     icon: 'none'
+    //     //   })
+    //     //   return
+    //     // }
+    //     that.setData({
+    //       currentGoods: data
+    //     })
+    //     // if (this.data.page == 1) {
+    //     //   this.setData({
+    //     //     currentGoods: data
+    //     //   })
+    //     // } else {
+    //     //   this.setData({
+    //     //     currentGoods: this.data.currentGoods.concat(res.data.result)
+    //     //   })
+    //     // }
+    //   },
+    //   method: 'GET'
+    // })
+
     const res = await WXAPI.goodsv2({
       categoryId,
       page: this.data.page,
@@ -179,6 +234,9 @@ Page({
     }
   },
   onShow() {
+    wx.request({
+      url: 'url',
+    })
     AUTH.checkHasLogined().then(isLogined => {
       if (isLogined) {
         this.setData({
