@@ -13,7 +13,26 @@ Page({
     loadingHidden: false, // loading
     selectCurrent: 0,
     categories: [],
-    categoriesTop5: [],
+    categoriesTop5: [
+      {icon: "../../images/home-thunbnail.jpg",
+      id: 301817,
+      isUse: true,
+      level: 1,
+      name: "品质生活馆",
+      paixu: 1,
+      pid: 0,
+      shopId: 0,
+      userId: 45112},
+      {icon: "../../images/home-thunbnail.jpg",
+      id: 301813,
+      isUse: true,
+      level: 1,
+      name: "家政维修",
+      paixu: 2,
+      pid: 0,
+      shopId: 0,
+      userId: 45112}
+    ],
     goods: [],
     loadingMoreHidden: true,
     coupons: [],
@@ -250,14 +269,16 @@ Page({
       })
       categories = categories.concat(_categories)
       
-      for(var i = 0; i<2; i++){
-        categoriesTop5[i] = categories[i]
-      }
-      console.log(categoriesTop5)
+      // for(var i = 0; i<2; i++){
+      //   categoriesTop5[i] = categories[i]
+      // }
+      // console.log("!!!!!!!!!!!!!!!")
+      // console.log(categoriesTop5)
+      // console.log("!!!!!!!!!!!!!!!")
     }
     this.setData({
       categories,
-      categoriesTop5,
+      // categoriesTop5,
       curPage: 1
     });
     this.getGoodsList(0);

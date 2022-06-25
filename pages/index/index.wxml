@@ -1,17 +1,17 @@
 <van-sticky>
-<view class="search-container">
+<!-- <view class="search-container">
   <view class="search" style="height:{{navHeight}}px;padding-top:{{navTop}}px">
     <view class="search-title" 
       style="height:{{navHeight-navTop-5}}px;line-height:{{navHeight-navTop-5}}px;">
       {{mallName}}
     </view>
     
-    <!-- 输入框 -->
-    <!-- <input placeholder-class="search-placeholder"
+    输入框
+    <input placeholder-class="search-placeholder"
       style="width:{{menuButtonObject.left-18-((132/52)*(navHeight-navTop-5))}}px" type="text" placeholder="输入关键词搜索" disabled
-      value="{{name}}" bindinput="bindinput" bindtap="goSearch"></input> -->
+      value="{{name}}" bindinput="bindinput" bindtap="goSearch"></input>
   </view>
-</view>
+</view> -->
 </van-sticky>
 <navigator wx:if="{{shopInfo}}" url="/pages/shop/select">
   <view class="shops-container">
@@ -43,6 +43,16 @@ module.exports = {
 }
 </wxs>
 <view class="swiper-container">
+  <!-- <view class="search-title padding-left-sl" 
+    style="height:{{navHeight-navTop-5}}px;line-height:{{navHeight-navTop-5}}px;margin-top: {{navTop}}px;color: white;">
+    {{mallName}}
+  </view> -->
+  <view class="search-title padding-left-sl" 
+    style="height:{{navHeight-navTop-5}}px;line-height:{{navHeight-navTop-5}}px;margin-top: {{navTop}}px">
+    {{mallName}}
+  </view>
+
+
   <swiper class="swiper1" indicator-dots="true" indicator-active-color="#fff" autoplay circular>
     <swiper-item wx:for="{{banners}}" wx:key="id">
       <image mode="aspectFill" bindtap="tapBanner" data-url="{{item.linkUrl}}" src="{{item.url}}" />
@@ -62,13 +72,11 @@ module.exports = {
   </view>
 </view>
 <view class="category-container">
-  <view class="category-box">
-    <view class="category-list" wx:for="{{categoriesTop5}}" wx:key="id">
-      <view class="category-column" bindtap="tabClick"
-        data-id="{{item.id}}">
-        <image mode="aspectFill" class="category-imgbox" src="{{item.icon}}"></image>
-        <view class="category-title">{{item.name}}</view>
-      </view>
+  <view class="category-list" wx:for="{{categoriesTop5}}" wx:key="id">
+    <view bindtap="tabClick" data-id="{{item.id}}">
+      <image class="category-imgbox" mode="widthFix" src="{{item.icon}}">
+      </image>
+      <view class="category-title">{{item.name}}</view>
     </view>
   </view>
 </view>
@@ -119,7 +127,7 @@ module.exports = {
   </block>
   <!-- 秒杀结束 -->
 
-  <view class="space"></view>
+  <!-- <view class="space"></view> -->
   <van-divider custom-class="table-text" wx:if="{{goodsRecommend.length > 0}}"
     contentPosition="center">
     <image class="table-icon-tuijian" src="../../images/home/recommend.png"></image> 爆品推荐
