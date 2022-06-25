@@ -23,7 +23,7 @@ Page({
       pid: 0,
       shopId: 0,
       userId: 45112},
-      {icon: "../../images/home-thunbnail.jpg",
+      {icon: "../../images/repair-thumbnail.jpg",
       id: 301813,
       isUse: true,
       level: 1,
