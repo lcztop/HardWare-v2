@@ -35,11 +35,11 @@ Page({
     const _this = this
     AUTH.checkHasLogined().then(isLogined => {
       if (isLogined) {
-        _this.getUserApiInfo(); // 获取基本信息
-        _this.getUserAmount();  // 获取用户余额、积分、会员等级
-        _this.orderStatistics();
-        _this.cardMyList();
-        TOOLS.showTabBarBadge();
+        _this.getUserApiInfo();   // 获取基本信息
+        _this.getUserAmount();    // 获取用户余额、积分、会员等级
+        _this.orderStatistics();  // 获取订单数据
+        _this.cardMyList();       // 获取购物车数据
+        TOOLS.showTabBarBadge();  // 展示购物车红点
       } else {
         AUTH.authorize().then(res => {
           AUTH.bindSeller()
