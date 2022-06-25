@@ -146,7 +146,7 @@ module.exports = {
       </view>
     </view>
   </view>
-  <view class="space"></view>
+  <!-- <view class="space"></view> -->
   <view wx-if="{{kanjiaList.length > 0}}"
     class="kanjia-container">
     <van-divider custom-class="table-text" contentPosition="center">
@@ -164,7 +164,7 @@ module.exports = {
     </van-card>
   </view>
   <block wx:if="{{pingtuanList.length > 0}}">
-    <view class='space'></view>
+    <!-- <view class='space'></view> -->
     <van-divider custom-class="table-text" contentPosition="center">
       <image class="table-icon-pingtuan" src="../../images/home/pingtuan.png"></image> 全民拼团
     </van-divider>
@@ -187,7 +187,7 @@ module.exports = {
     </view>
   </block>
 
-  <view class='space'></view>
+  <!-- <view class='space'></view> -->
   <van-divider custom-class="table-text" contentPosition="center">
     <image class="table-icon-goodslist" src="../../images/home/goodslist.png"></image> 商品列表
   </van-divider>
