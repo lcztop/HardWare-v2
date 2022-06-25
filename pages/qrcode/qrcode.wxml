@@ -1,0 +1,3 @@
+<!--pages/qrcode/qrcode.wxml-->
+<!-- <button bindtap="clearStorage">一键remake</button> -->
+<button bindtap="logout">一键logout</button>

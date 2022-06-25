@@ -24,10 +24,10 @@
     <view class="header-box2"> </view>
     <view class="line"></view>
     <view class="asset">
-      <view class='item'>
+      <!-- <view class='item'>
         <view class="Count">{{freeze}}</view>
         <view>冻结金额</view>
-      </view>
+      </view> -->
       <view class='item right'>
         <view class="Count" style="color:#FF444A">{{balance}}</view>
         <view>可用金额</view>

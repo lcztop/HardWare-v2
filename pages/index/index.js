@@ -18,7 +18,8 @@ Page({
     loadingMoreHidden: true,
     coupons: [],
     curPage: 1,
-    pageSize: 20
+    pageSize: 20,
+    banners:[]
   },
   tabClick(e) {
     // 商品分类点击
@@ -172,22 +173,40 @@ Page({
       })
     }
   },
+  async getBanners(token){
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-banner',
+        method:'GET',
+        success: function(res){
+          return resolve(res)
+        },
+        fail: function(res){
+          return resolve(res)
+        }
+      })
+    })
+  },
   async initBanners(){
     const _data = {}
+    let res1 = await this.getBanners()
+    console.log(res1)
     // 读取头部轮播图
-    const res1 = await WXAPI.banners({
-      type: 'index'
+    // const res1 = await WXAPI.banners({
+    //   type: 'index'
+    // })
+    // if (res1.code == 700) {
+    //   wx.showModal({
+    //     title: '提示',
+    //     content: '请在后台添加 banner 轮播图片，自定义类型填写 index',
+    //     showCancel: false
+    //   })
+    // } else {
+    //   _data.banners = res1.data.colContent
+    // }
+    this.setData({
+      banners:res1.data.colContent
     })
-    if (res1.code == 700) {
-      wx.showModal({
-        title: '提示',
-        content: '请在后台添加 banner 轮播图片，自定义类型填写 index',
-        showCancel: false
-      })
-    } else {
-      _data.banners = res1.data
-    }
-    this.setData(_data)
   },
   getPhoneNumber (e) {
     console.log(e)

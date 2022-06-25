@@ -120,11 +120,12 @@ async function login(page){
     }
   })
 }
+
 async function getSession(code){
   return new Promise((resolve, reject) => {
     console.log(code)
     wx.request({
-      url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/cas/homehome/register',
+      url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/cas/homehome/login',
       data:{
         'code': code
       },
@@ -139,7 +140,6 @@ async function getSession(code){
   })
 }
 async function authorize() {
-  
   const code1 = await wxaCode()
   const session = await getSession(code1)
   console.log(session.data)
@@ -147,62 +147,64 @@ async function authorize() {
   const resLogin = await WXAPI.login_wx(code2)
   console.log(resLogin)
   if (resLogin.code == 0) {
+    wx.setStorageSync('homehomeToken', session.data.homehomeToken)
+    wx.setStorageSync('openID', session.data.testData.openid)
     wx.setStorageSync('token', resLogin.data.token)
     wx.setStorageSync('uid', resLogin.data.uid)
     return resLogin
   }
-  // return new Promise((resolve, reject) => {
-  //   wx.login({
-  //     success: function (res) {
-  //       const code = res.code
-  //       let referrer = '' // 推荐人
-  //       let referrer_storge = wx.getStorageSync('referrer');
-  //       if (referrer_storge) {
-  //         referrer = referrer_storge;
-  //       }
-  //       // 下面开始调用注册接口
-  //       const extConfigSync = wx.getExtConfigSync()
-  //       if (extConfigSync.subDomain) {
-  //         WXAPI.wxappServiceAuthorize({
-  //           code: code,
-  //           referrer: referrer
-  //         }).then(function (res) {
-  //           if (res.code == 0) {
-  //             wx.setStorageSync('token', res.data.token)
-  //             wx.setStorageSync('uid', res.data.uid)
-  //             resolve(res)
-  //           } else {
-  //             wx.showToast({
-  //               title: res.msg,
-  //               icon: 'none'
-  //             })
-  //             reject(res.msg)
-  //           }
-  //         })
-  //       } else {
-  //         WXAPI.authorize({
-  //           code: code,
-  //           referrer: referrer
-  //         }).then(function (res) {
-  //           if (res.code == 0) {
-  //             wx.setStorageSync('token', res.data.token)
-  //             wx.setStorageSync('uid', res.data.uid)
-  //             resolve(res)
-  //           } else {
-  //             wx.showToast({
-  //               title: res.msg,
-  //               icon: 'none'
-  //             })
-  //             reject(res.msg)
-  //           }
-  //         })
-  //       }
-  //     },
-  //     fail: err => {
-  //       reject(err)
-  //     }
-  //   })
-  // })
+  return new Promise((resolve, reject) => {
+    wx.login({
+      success: function (res) {
+        const code = res.code
+        let referrer = '' // 推荐人
+        let referrer_storge = wx.getStorageSync('referrer');
+        if (referrer_storge) {
+          referrer = referrer_storge;
+        }
+        // 下面开始调用注册接口
+        const extConfigSync = wx.getExtConfigSync()
+        if (extConfigSync.subDomain) {
+          WXAPI.wxappServiceAuthorize({
+            code: code,
+            referrer: referrer
+          }).then(function (res) {
+            if (res.code == 0) {
+              wx.setStorageSync('token', res.data.token)
+              wx.setStorageSync('uid', res.data.uid)
+              resolve(res)
+            } else {
+              wx.showToast({
+                title: res.msg,
+                icon: 'none'
+              })
+              reject(res.msg)
+            }
+          })
+        } else {
+          WXAPI.authorize({
+            code: code,
+            referrer: referrer
+          }).then(function (res) {
+            if (res.code == 0) {
+              wx.setStorageSync('token', res.data.token)
+              wx.setStorageSync('uid', res.data.uid)
+              resolve(res)
+            } else {
+              wx.showToast({
+                title: res.msg,
+                icon: 'none'
+              })
+              reject(res.msg)
+            }
+          })
+        }
+      },
+      fail: err => {
+        reject(err)
+      }
+    })
+  })
 }
 
 function loginOut(){
@@ -263,5 +265,6 @@ module.exports = {
   loginOut: loginOut,
   checkAndAuthorize: checkAndAuthorize,
   authorize: authorize,
-  bindSeller: bindSeller
+  bindSeller: bindSeller,
+  getSession: getSession
 }

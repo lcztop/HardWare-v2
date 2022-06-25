@@ -55,7 +55,8 @@
     "pages/recycle/orders",
     "pages/recycle/order-detail",
     "pages/card/logs",
-    "pages/notagree/index"
+    "pages/notagree/index",
+    "pages/qrcode/qrcode"
   ],
   "subpackages": [
     {
@@ -120,6 +121,12 @@
         "iconPath": "images/nav/fl-off.png",
         "selectedIconPath": "images/nav/fl-on.png",
         "text": "分类"
+      },
+      {
+        "pagePath": "pages/qrcode/qrcode",
+        "iconPath": "images/qrcode.png",
+        "selectedIconPath": "images/qrcode.png",
+        "text": "二维码"
       },
       {
         "pagePath": "pages/shop-cart/index",

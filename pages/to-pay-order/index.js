@@ -48,7 +48,7 @@ Page({
     pageIsEnd: false,
 
 
-    bindMobileStatus: 0, // 0 未判断 1 已绑定手机号码 2 未绑定手机号码
+    bindMobileStatus: 1, // 0 未判断 1 已绑定手机号码 2 未绑定手机号码
     userScore: 0, // 用户可用积分
     deductionScore: '0', // 本次交易抵扣的积分数
     shopCarType: 0, //0自营购物车，1云货架购物车
@@ -814,19 +814,21 @@ Page({
     const res = await WXAPI.userDetail(wx.getStorageSync('token'))
     if (res.code == 0) {
       this.setData({
-        bindMobileStatus: res.data.base.mobile ? 1 : 2, // 账户绑定的手机号码状态
-        mobile: res.data.base.mobile,
+        // bindMobileStatus: res.data.base.mobile ? 1 : 2, // 账户绑定的手机号码状态
+        // mobile: res.data.base.mobile,
+        bindMobileStatus: 1, // 账户绑定的手机号码状态
+        mobile: '12345678910',
       })
     }
   },
   async getPhoneNumber(e) {
-    if (!e.detail.errMsg || e.detail.errMsg != "getPhoneNumber:ok") {
-      wx.showToast({
-        title: e.detail.errMsg,
-        icon: 'none'
-      })
-      return;
-    }
+    // if (!e.detail.errMsg || e.detail.errMsg != "getPhoneNumber:ok") {
+    //   wx.showToast({
+    //     title: e.detail.errMsg,
+    //     icon: 'none'
+    //   })
+    //   return;
+    // }
     let res
     const extConfigSync = wx.getExtConfigSync()
     if (extConfigSync.subDomain) {

@@ -22,11 +22,7 @@ Page({
       {
         status: 2,
         label: '待收货'
-      },
-      {
-        status: 3,
-        label: '待评价'
-      },
+      }
     ],
     status: 9999,
     hasRefund: false,

@@ -10,6 +10,7 @@ Page({
     growth:0,
     score_sign_continuous:0,
     rechargeOpen: false, // 是否开启充值[预存]功能
+    openID:'',
 
     // 用户订单统计数据
     count_id_no_confirm: 0,
@@ -28,11 +29,14 @@ Page({
     }
 	},
   onShow() {
+    this.setData({
+      openID : wx.getStorageSync('openID')
+    })
     const _this = this
     AUTH.checkHasLogined().then(isLogined => {
       if (isLogined) {
-        _this.getUserApiInfo();
-        _this.getUserAmount();
+        _this.getUserApiInfo(); // 获取基本信息
+        _this.getUserAmount();  // 获取用户余额、积分、会员等级
         _this.orderStatistics();
         _this.cardMyList();
         TOOLS.showTabBarBadge();
@@ -65,6 +69,7 @@ Page({
   },
   async getUserApiInfo() {
     const res = await WXAPI.userDetail(wx.getStorageSync('token'))
+    console.log(res.data)
     if (res.code == 0) {
       let _data = {}
       _data.apiUserInfoMap = res.data
@@ -186,6 +191,12 @@ Page({
     })
   },
   async _updateUserInfo(userInfo) {
+    AUTH.wxaCode().then(res1 => {
+      console.log(res1)
+      AUTH.getSession(res1).then(res2 => {
+        wx.setStorageSync('openID', res2.data.testData.openid)
+      })
+    })
     const postData = {
       token: wx.getStorageSync('token'),
       nick: userInfo.nickName,

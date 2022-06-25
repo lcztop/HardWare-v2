@@ -21,10 +21,10 @@
         <view class="Count">{{fxCommisionPaying}}</view>
         <view>未结算金额</view>
       </view>
-      <view class='item' bindtap='goAsset' style="width: 170rpx">
+      <!-- <view class='item' bindtap='goAsset' style="width: 170rpx">
         <view class="Count">{{freeze}}</view>
         <view>冻结金额</view>
-      </view>
+      </view> -->
       <view class='item right' bindtap='goAsset' style="width: 170rpx">
         <view class="Count" style="color:#FF444A">{{balance}}</view>
         <view>可用金额</view>
