@@ -144,7 +144,7 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "获取离你最近的门店"
+      "desc": "获取附近门店信息"
     }
   },
   "usingComponents": {

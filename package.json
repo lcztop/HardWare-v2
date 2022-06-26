@@ -6,6 +6,7 @@
   "dependencies": {
     "@vant/weapp": "^1.6.8",
     "apifm-wxapi": "^3.54.2",
+    "weapp-qrcode-canvas-2d": "^1.1.2",
     "wxa-plugin-canvas": "^1.1.12",
     "wxbarcode": "^1.0.2"
   },

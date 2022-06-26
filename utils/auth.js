@@ -141,6 +141,7 @@ async function getSession(code){
 }
 async function authorize() {
   const code1 = await wxaCode()
+  console.log(code1)
   const session = await getSession(code1)
   console.log(session.data)
   const code2 = await wxaCode()

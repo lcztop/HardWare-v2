@@ -31,13 +31,31 @@ Page({
     this.setData({
       categoryMod: wx.getStorageSync('categoryMod')
     })
+    this.getSession()
     this.categories();
+  },
+  async getSession(){
+    return new Promise((resolve, reject) => {
+      
+      wx.request({
+        url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-category',
+        method:'GET',
+        success: function(res){
+          
+          return resolve(res)
+        },
+        fail: function(res){
+          return resolve(res)
+        }
+      })
+    })
   },
   async categories() {
     wx.showLoading({
       title: '',
     })
     const res = await WXAPI.goodsCategory()
+    console.log(res)
     wx.hideLoading()
     let activeCategory = 0
     let categorySelected = this.data.categorySelected
