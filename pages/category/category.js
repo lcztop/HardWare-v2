@@ -31,17 +31,31 @@ Page({
     this.setData({
       categoryMod: wx.getStorageSync('categoryMod')
     })
-    this.getSession()
     this.categories();
   },
-  async getSession(){
+  async getCategories(){
     return new Promise((resolve, reject) => {
-      
       wx.request({
         url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-category',
         method:'GET',
         success: function(res){
-          
+          return resolve(res)
+        },
+        fail: function(res){
+          return resolve(res)
+        }
+      })
+    })
+  },
+  async getGoodsList2(categoryID){
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-sku/',
+        data:{
+          categoryID
+        },
+        method:'GET',
+        success: function(res){
           return resolve(res)
         },
         fail: function(res){
@@ -54,21 +68,22 @@ Page({
     wx.showLoading({
       title: '',
     })
-    const res = await WXAPI.goodsCategory()
+    // const res = await WXAPI.goodsCategory()
+    const res = await this.getCategories()
     console.log(res)
     wx.hideLoading()
     let activeCategory = 0
     let categorySelected = this.data.categorySelected
-    if (res.code == 0) {
+    if (res.statusCode == 200) {
       const categories = res.data.filter(ele => {
         return !ele.vopCid1 && !ele.vopCid2
       })
-      categories.forEach(p => {
-        p.childs = categories.filter(ele => {
-          return p.id == ele.pid
-        })
-      })
-      const firstCategories = categories.filter(ele => { return ele.level == 1 })
+      // categories.forEach(p => {
+      //   p.childs = categories.filter(ele => {
+      //     return p.id == ele.pid
+      //   })
+      // })
+      const firstCategories = categories.filter(ele => { return res.data[0] })
       if (this.data.categorySelected.id) {
         activeCategory = firstCategories.findIndex(ele => {
           return ele.id == this.data.categorySelected.id
@@ -77,20 +92,20 @@ Page({
       } else {
         categorySelected = firstCategories[0]
       }
-      const resAd = await WXAPI.adPosition('category_' + categorySelected.id)
-      let adPosition = null
-      if (resAd.code === 0) {
-        adPosition = resAd.data
-      }
+      // const resAd = await WXAPI.adPosition('category_' + categorySelected.id)
+      // let adPosition = null
+      // if (resAd.code === 0) {
+      //   adPosition = resAd.data
+      // }
       this.setData({
         page: 1,
         activeCategory,
         categories,
         firstCategories,
         categorySelected,
-        adPosition
+        // adPosition
       })
-      this.getGoodsList()
+      // this.getGoodsList()
     }
   },
   async getGoodsList() {
@@ -147,6 +162,9 @@ Page({
   },
   async onCategoryClick(e) {
     const idx = e.target.dataset.idx
+    let res123 = this.getGoodsList2('11246118')
+    console.log(res123)
+    console.log(e.target)
     if (idx == this.data.activeCategory) {
       this.setData({
         scrolltop: 0,

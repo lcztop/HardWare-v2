@@ -24,12 +24,14 @@
 }
 
 .search-title {
+  position: absolute;
   left: 0;
   font-weight: bold;
   font-size: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  z-index: 99999;
 }
 
 .search-placeholder {
@@ -151,63 +153,75 @@
 }
 
 .category-container {
-  padding: 0 0 10px 0;
-  margin-top: 16rpx;
-  position: relative;
-  background-color: white;
+  height: 240rpx;
+  display: flex;
+  /* margin-top: 16rpx; */
+  /* background-color: white; */
+  /* background-color: magenta; */
 }
 
 .category-box {
-  background-color: #fff;
   display: flex;
   flex-wrap: wrap;
-  box-shadow: 0px 0px 18px 0px rgba(5, 5, 5, 0.15);
-  width: 700rpx;
-  margin-left: 25rpx;
-  border-radius: 10px;
-  padding: 20rpx 0;
+  /* box-shadow: 0px 0px 18px 0px rgba(5, 5, 5, 0.15); */
+  width: 100%;
+  /* margin-left: 25rpx; */
+  padding: 0 0;
   position: inherit;
   justify-content: space-around;
 }
 
 .category-list {
-  width: 140rpx;
-  text-align: center;
-  display: inline-block;
+  width: 375rpx;
+  height: auto;
   overflow: hidden;
+  position: relative;
+  /* text-align: center; */
+  /* overflow: hidden; */
 }
 
 .category-column {
   width: 100%;
-  margin-top: 20rpx;
+  /* margin-top: 20rpx; */
   overflow: hidden;
 }
 
 .category-imgbox {
-  width: 100rpx;
-  height: 100rpx;
+  width: 375rpx;
 }
 
 .category-title {
+  width: 375rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
   font-size: 24rpx;
   text-align: center;
+  position: absolute;
+  top: 0;
+  font-size: 32rpx;
+  background: rgba(0,0,0,.4);
 }
 
 .swiper-container {
   width: 750rpx;
-  height: 375rpx;
+  height: 600rpx;
   position: relative;
   z-index: 1;
 }
 
 .swiper-container .swiper1 {
   width: 750rpx;
-  height: 375rpx;
+  height: 600rpx;
 }
-
+.padding-left-sl{
+  padding-left: 24rpx;
+}
 .swiper-container .swiper1 image {
   width: 750rpx;
-  height: 375rpx;
+  height: 600rpx;
   /* margin: 8rpx 15rpx; */
   /* border-radius: 16rpx; */
 }
@@ -244,13 +258,13 @@
 
 .goods-box .img-box {
   width: 339rpx;
-  height: 339rpx;
+  /* height: 339rpx; */
   overflow: hidden;
 }
 
 .goods-box .img-box image {
   width: 339rpx;
-  height: 339rpx;
+  height: 240rpx;
 }
 
 .goods-box .goods-title {
