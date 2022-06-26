@@ -1,1 +1,5 @@
 /* pages/qrcode/qrcode.wxss */
+
+.container{
+  display: flex;
+}

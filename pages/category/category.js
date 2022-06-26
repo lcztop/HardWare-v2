@@ -24,7 +24,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     wx.showShareMenu({
       withShareTicket: true
     })
@@ -33,32 +33,29 @@ Page({
     })
     this.categories();
   },
-  async getCategories(){
+  async getCategories() {
     return new Promise((resolve, reject) => {
       wx.request({
         url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-category',
-        method:'GET',
-        success: function(res){
+        method: 'GET',
+        success: function (res) {
           return resolve(res)
         },
-        fail: function(res){
+        fail: function (res) {
           return resolve(res)
         }
       })
     })
   },
-  async getGoodsList2(categoryID){
+  async getGoodsList2(categoryID) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-sku/',
-        data:{
-          categoryID
-        },
-        method:'GET',
-        success: function(res){
+        url: `https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-sku/${categoryID}`,
+        method: 'GET',
+        success: function (res) {
           return resolve(res)
         },
-        fail: function(res){
+        fail: function (res) {
           return resolve(res)
         }
       })
@@ -83,7 +80,9 @@ Page({
       //     return p.id == ele.pid
       //   })
       // })
-      const firstCategories = categories.filter(ele => { return res.data[0] })
+      const firstCategories = categories.filter(ele => {
+        return res.data[0]
+      })
       if (this.data.categorySelected.id) {
         activeCategory = firstCategories.findIndex(ele => {
           return ele.id == this.data.categorySelected.id
@@ -105,7 +104,7 @@ Page({
         categorySelected,
         // adPosition
       })
-      // this.getGoodsList()
+      this.getGoodsList()
     }
   },
   async getGoodsList() {
@@ -116,54 +115,55 @@ Page({
       title: '',
     })
     // secondCategoryId
-    let categoryId = ''
+    let categoryID = ''
     if (this.data.secondCategoryId) {
-      categoryId = this.data.secondCategoryId
-    } else if(this.data.categorySelected.id) {
-      categoryId = this.data.categorySelected.id
+      categoryID = this.data.secondCategoryId
+    } else if (this.data.categorySelected.id) {
+      categoryID = this.data.categorySelected.id
     }
     // https://www.yuque.com/apifm/nu0f75/wg5t98
-    const res = await WXAPI.goodsv2({
-      categoryId,
-      page: this.data.page,
-      pageSize: this.data.pageSize
-    })
+    // const res = await WXAPI.goodsv2({
+    //   categoryId,
+    //   page: this.data.page,
+    //   pageSize: this.data.pageSize
+    // })
+
+    console.log(categoryID)
+    let res = await this.getGoodsList2(categoryID)
     console.log(res)
     wx.hideLoading()
-    if (res.code == 700) {
-      if (this.data.page == 1) {
-        this.setData({
-          currentGoods: null
-        });
-      } else {
-        wx.showToast({
-          title: '没有更多了',
-          icon: 'none'
-        })
-      }
-      return
-    }
-    if (res.code != 0) {
-      wx.showToast({
-        title: res.msg,
-        icon: 'none'
-      })
-      return
-    }
-    if (this.data.page == 1) {
-      this.setData({
-        currentGoods: res.data.result
-      })
-    } else {
-      this.setData({
-        currentGoods: this.data.currentGoods.concat(res.data.result)
-      })
-    }
+    // if (res.statusCode == 200) {
+    //   if (this.data.page == 1) {
+    //     this.setData({
+    //       currentGoods: null
+    //     });
+    //   } else {
+    //     wx.showToast({
+    //       title: '没有更多了',
+    //       icon: 'none'
+    //     })
+    //   }
+    //   return
+    // }
+    // if (res.code != 0) {
+    //   wx.showToast({
+    //     title: res.msg,
+    //     icon: 'none'
+    //   })
+    //   return
+    // }
+    // if (res.data.page == 1) {
+    //   this.setData({
+    //     currentGoods: res.data.slice(0,9)
+    //   })
+    // } else {
+    //   this.setData({
+    //     currentGoods: this.data.currentGoods.concat(res.data.slice(0,9))
+    //   })
+    // }
   },
   async onCategoryClick(e) {
     const idx = e.target.dataset.idx
-    let res123 = this.getGoodsList2('11246118')
-    console.log(res123)
     console.log(e.target)
     if (idx == this.data.activeCategory) {
       this.setData({
@@ -172,18 +172,18 @@ Page({
       return
     }
     const categorySelected = this.data.firstCategories[idx]
-    const res = await WXAPI.adPosition('category_' + categorySelected.id)
-    let adPosition = null
-    if (res.code === 0) {
-      adPosition = res.data
-    }
+    console.log(categorySelected)
+    // const res = await WXAPI.adPosition('category_' + categorySelected.id)
+    // let adPosition = null
+    // if (res.code === 0) {
+    //   adPosition = res.data
+    // }
     this.setData({
       page: 1,
       secondCategoryId: '',
       activeCategory: idx,
       categorySelected,
       scrolltop: 0,
-      adPosition
     });
     this.getGoodsList();
   },
@@ -192,7 +192,7 @@ Page({
     let secondCategoryId = ''
     if (idx) {
       // 点击了具体的分类
-      secondCategoryId = this.data.categorySelected.childs[idx-1].id
+      secondCategoryId = this.data.categorySelected.childs[idx - 1].id
     }
     this.setData({
       page: 1,
@@ -208,7 +208,7 @@ Page({
       url: '/pages/goods/list?name=' + this.data.inputVal,
     })
   },
-  onShareAppMessage() {    
+  onShareAppMessage() {
     return {
       title: '"' + wx.getStorageSync('mallName') + '" ' + wx.getStorageSync('share_profile'),
       path: '/pages/index/index?inviter_id=' + wx.getStorageSync('uid')
@@ -250,7 +250,7 @@ Page({
       sku: []
     })
   },
-  async addShopCarCheck(options){
+  async addShopCarCheck(options) {
     AUTH.checkHasLogined().then(isLogined => {
       this.setData({
         wxlogin: isLogined
@@ -263,7 +263,7 @@ Page({
       }
     })
   },
-  async addShopCarDone(options){
+  async addShopCarDone(options) {
     const res = await WXAPI.shippingCarInfoAddItem(wx.getStorageSync('token'), options.goodsId, options.buyNumber, options.sku)
     if (res.code == 30002) {
       // 需要选择规格尺寸
@@ -305,7 +305,7 @@ Page({
     wx.showTabBar()
     TOOLS.showTabBarBadge() // 获取购物车数据，显示TabBarBadge
   },
-  storesJia(){
+  storesJia() {
     const skuCurGoods = this.data.skuCurGoods
     if (skuCurGoods.basicInfo.storesBuy < skuCurGoods.basicInfo.stores) {
       skuCurGoods.basicInfo.storesBuy++
@@ -314,7 +314,7 @@ Page({
       })
     }
   },
-  storesJian(){
+  storesJian() {
     const skuCurGoods = this.data.skuCurGoods
     if (skuCurGoods.basicInfo.storesBuy > 1) {
       skuCurGoods.basicInfo.storesBuy--
@@ -323,19 +323,21 @@ Page({
       })
     }
   },
-  closeSku(){
+  closeSku() {
     this.setData({
       skuCurGoods: null,
       skuCurGoodsShow: false
     })
     wx.showTabBar()
   },
-  skuSelect(e){
+  skuSelect(e) {
     const pid = e.currentTarget.dataset.pid
     const id = e.currentTarget.dataset.id
     // 处理选中
     const skuCurGoods = this.data.skuCurGoods
-    const property = skuCurGoods.properties.find(ele => {return ele.id == pid})
+    const property = skuCurGoods.properties.find(ele => {
+      return ele.id == pid
+    })
     let child
     property.childsCurGoods.forEach(ele => {
       if (ele.id == id) {
@@ -409,13 +411,15 @@ Page({
       buyNumber: (buyNumMax >= buyNumber) ? buyNumber : 0
     });
   },
-  addCarSku(){
+  addCarSku() {
     const skuCurGoods = this.data.skuCurGoods
     const propertySize = skuCurGoods.properties.length // 有几组SKU
     const sku = []
     skuCurGoods.properties.forEach(p => {
-      const o = p.childsCurGoods.find(ele => {return ele.active})
-      if (!o) {        
+      const o = p.childsCurGoods.find(ele => {
+        return ele.active
+      })
+      if (!o) {
         return
       }
       sku.push({
