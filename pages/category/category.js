@@ -25,6 +25,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    
     wx.showShareMenu({
       withShareTicket: true
     })
@@ -67,7 +68,7 @@ Page({
     })
     // const res = await WXAPI.goodsCategory()
     const res = await this.getCategories()
-    console.log(res)
+    // console.log(res)
     wx.hideLoading()
     let activeCategory = 0
     let categorySelected = this.data.categorySelected
@@ -128,9 +129,12 @@ Page({
     //   pageSize: this.data.pageSize
     // })
 
-    console.log(categoryID)
+    // console.log(categoryID)
     let res = await this.getGoodsList2(categoryID)
-    console.log(res)
+    // console.log(res)
+    this.setData({
+          currentGoods: res.data.slice(0,1)
+        })
     wx.hideLoading()
     // if (res.statusCode == 200) {
     //   if (this.data.page == 1) {
@@ -244,8 +248,9 @@ Page({
       })
       return
     }
+    // console.log(curGood)
     this.addShopCarCheck({
-      goodsId: curGood.id,
+      goods: curGood,
       buyNumber: 1,
       sku: []
     })
@@ -264,36 +269,60 @@ Page({
     })
   },
   async addShopCarDone(options) {
-    const res = await WXAPI.shippingCarInfoAddItem(wx.getStorageSync('token'), options.goodsId, options.buyNumber, options.sku)
-    if (res.code == 30002) {
-      // 需要选择规格尺寸
-      const skuCurGoodsRes = await WXAPI.goodsDetail(options.goodsId)
-      if (skuCurGoodsRes.code != 0) {
+    // const res = await WXAPI.shippingCarInfoAddItem(wx.getStorageSync('token'), options.goodsId, options.buyNumber, options.sku)
+    console.log('1231231231')
+    console.log(options)
+    options.goods.number = 1
+    let goodsList = wx.getStorageSync('goodsList')
+    for(let i = 0; i<goodsList.length; i++){
+      if(goodsList[i].id == options.goods.id){
+        goodsList[i].number +=1
+        wx.setStorageSync('goodsList', goodsList)
         wx.showToast({
-          title: skuCurGoodsRes.msg,
-          icon: 'none'
+          title: '加入成功',
+          icon: 'success'
         })
+        this.setData({
+          skuCurGoods: null,
+          skuCurGoodsShow: false
+        })
+        wx.showTabBar()
+        TOOLS.showTabBarBadge()
         return
       }
-      wx.hideTabBar()
-      const skuCurGoods = skuCurGoodsRes.data
-      skuCurGoods.basicInfo.storesBuy = 1
-      this.setData({
-        skuCurGoods,
-        skuGoodsPic: skuCurGoods.basicInfo.pic,
-        selectSizePrice: skuCurGoods.basicInfo.minPrice,
-        selectSizeOPrice: skuCurGoods.basicInfo.originalPrice,
-        skuCurGoodsShow: true
-      })
-      return
     }
-    if (res.code != 0) {
-      wx.showToast({
-        title: res.msg,
-        icon: 'none'
-      })
-      return
-    }
+    goodsList = goodsList.concat(options.goods)
+    wx.setStorageSync('goodsList', goodsList)
+    // console.log(res)
+    // if (res.code == 30002) {
+    //   // 需要选择规格尺寸
+    //   const skuCurGoodsRes = await WXAPI.goodsDetail(options.goodsId)
+    //   if (skuCurGoodsRes.code != 0) {
+    //     wx.showToast({
+    //       title: skuCurGoodsRes.msg,
+    //       icon: 'none'
+    //     })
+    //     return
+    //   }
+    //   wx.hideTabBar()
+    //   const skuCurGoods = skuCurGoodsRes.data
+    //   skuCurGoods.basicInfo.storesBuy = 1
+    //   this.setData({
+    //     skuCurGoods,
+    //     skuGoodsPic: skuCurGoods.basicInfo.pic,
+    //     selectSizePrice: skuCurGoods.basicInfo.minPrice,
+    //     selectSizeOPrice: skuCurGoods.basicInfo.originalPrice,
+    //     skuCurGoodsShow: true
+    //   })
+    //   return
+    // }
+    // if (res.code != 0) {
+    //   wx.showToast({
+    //     title: res.msg,
+    //     icon: 'none'
+    //   })
+    //   return
+    // }
     wx.showToast({
       title: '加入成功',
       icon: 'success'

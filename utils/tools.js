@@ -8,15 +8,18 @@ async function showTabBarBadge(noTabBarPage){
   }
   let number = 0
   // 自营商品
-  let res = await WXAPI.shippingCarInfo(token)
-  if (res.code == 0) {
-    number += res.data.number
+  // let res = await WXAPI.shippingCarInfo(token)
+  const res = wx.getStorageSync('goodsList')
+  for(let i = 0; i<res.length;i++){
+    number += res[i].number
   }
-  // vop 购物车
-  res = await WXAPI.jdvopCartInfo(token)
-  if (res.code == 0) {
-    number += res.data.number
-  }
+  
+  
+  // // vop 购物车
+  // res = await WXAPI.jdvopCartInfo(token)
+  // if (res.code == 0) {
+  //   number += res.data.number
+  // }
   if (!noTabBarPage) {
     if (number == 0) {
       // 删除红点点

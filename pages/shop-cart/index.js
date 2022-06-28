@@ -35,9 +35,9 @@ Page({
   onLoad: function () {
     this.initEleWidth();
     this.onShow();
-    this.setData({
-      shopping_cart_vop_open: wx.getStorageSync('shopping_cart_vop_open')
-    })
+    // this.setData({
+    //   shopping_cart_vop_open: wx.getStorageSync('shopping_cart_vop_open')
+    // })
   },
   onShow: function () {
     this.shippingCarInfo()
@@ -47,29 +47,35 @@ Page({
     if (!token) {
       return
     }
-    if (this.data.shopCarType == 0) { //自营购物车
-      var res = await WXAPI.shippingCarInfo(token)
-    } else if (this.data.shopCarType == 1) { //云货架购物车
-      var res = await WXAPI.jdvopCartInfo(token)
-    }
-    if (res.code == 0) {
-      if (this.data.shopCarType == 0) //自营商品
-      {
-        res.data.items.forEach(ele => {
-          if (!ele.stores || ele.status == 1) {
-            ele.selected = false
-          }
-        })
-      }
-      this.setData({
-        shippingCarInfo: res.data
-      })
-      console.log(this.data.shippingCarInfo)
-    } else {
-      this.setData({
-        shippingCarInfo: null
-      })
-    }
+    // if (this.data.shopCarType == 0) { //自营购物车
+    //   var res = await WXAPI.shippingCarInfo(token)
+    // } else if (this.data.shopCarType == 1) { //云货架购物车
+    //   var res = await WXAPI.jdvopCartInfo(token)
+    // }
+    var res = wx.getStorageSync('goodsList')
+    this.setData({
+      shippingCarInfo: res
+    })
+    console.log('123')
+    console.log(this.data.shippingCarInfo)
+    // if (res.code == 0) {
+    //   if (this.data.shopCarType == 0) //自营商品
+    //   {
+    //     res.data.items.forEach(ele => {
+    //       if (!ele.stores || ele.status == 1) {
+    //         ele.selected = false
+    //       }
+    //     })
+    //   }
+    //   this.setData({
+    //     shippingCarInfo: res.data
+    //   })
+    //   console.log(this.data.shippingCarInfo)
+    // } else {
+    //   this.setData({
+    //     shippingCarInfo: null
+    //   })
+    // }
   },
   toIndexPage: function () {
     wx.switchTab({
@@ -212,7 +218,7 @@ Page({
   },
   onChange(event) {
     this.setData({
-      shopCarType: event.detail.name
+      shopCarType: 0
     })
     this.shippingCarInfo()
   }

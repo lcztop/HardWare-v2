@@ -212,6 +212,8 @@ Page({
       }
     }
     const subscribe_ids = wx.getStorageSync('subscribe_ids')
+    const token = wx.getStorageSync('homehomeToken')
+    console.log(subscribe_ids)
     if (subscribe_ids) {
       wx.requestSubscribeMessage({
         tmplIds: subscribe_ids.split(','),
@@ -222,13 +224,69 @@ Page({
           console.error(e)
         },
         complete: (e) => {
-          this.createOrder(true)
+          // this.createOrder(true)
+          this.createOrder2(token)
         },
       })
     } else {
-      this.createOrder(true)
+      // this.createOrder(true)
+      this.createOrder2(token)
     }
   },
+  async getOrder2(token) {
+      return new Promise((resolve, reject) => {
+        let orderID = '22496ce0-f6df-11ec-bdc7-ffbcb4a33ea3'
+        wx.request({
+          url: `https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-one-order/${orderID}`,
+          header: {
+            "authorization":"bearer "+token
+          },
+          method:'GET',
+          success: function(res){
+            console.log(res)
+            return resolve(res)
+          },
+          fail: function(res){
+            return resolve(res)
+          }
+        })
+      })
+  },
+  async createOrder2(token) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/create-order',
+        header: {
+          "authorization":"bearer "+token
+        },
+        data:{
+          "items": [{
+            "id": 11248551,
+            "uuid": 11248551,
+            "rn": "1",
+            "code": "DL2006",
+            "name": "Nelson的macbook",
+            "barcode": "6970897940014",
+            "unit": "把",
+            "brand": "得力工具",
+            "category": "得力工具",
+            "price6": 14.9,
+            "amouunt": 10,
+            "retail_price": "99.11",
+             "cos_url":"baidu.com"
+          }]
+        },
+        method:'POST',
+        success: function(res){
+          console.log(res)
+          return resolve(res)
+        },
+        fail: function(res){
+          return resolve(res)
+        }
+      })
+    })
+},
   async createOrder(e) {
     // shopCarType: 0 //0自营购物车，1云货架购物车
     const loginToken = wx.getStorageSync('token') // 用户登录 token
@@ -346,6 +404,7 @@ Page({
       postData.extJsonStr = JSON.stringify(extJsonStr)
     }
     const shopList = this.data.shopList
+    
     let totalRes = {
       code: 0,
       msg: 'success',
@@ -560,6 +619,7 @@ Page({
         WXAPI.jdvopCartRemove(loginToken, keyArrays.join())
       }
     }
+    console.log(totalRes)
     this.processAfterCreateOrder(totalRes)
   },
   async processAfterCreateOrder(res) {

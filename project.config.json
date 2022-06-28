@@ -33,10 +33,7 @@
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true,
-    "showES6CompileOption": false,
-    "useStaticServer": true,
-    "disableUseStrict": false,
-    "useCompilerPlugins": false
+    "showES6CompileOption": false
   },
   "compileType": "miniprogram",
   "libVersion": "2.22.1",

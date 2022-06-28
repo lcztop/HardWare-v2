@@ -89,6 +89,7 @@ App({
         console.log(err);
       }
     })
+    wx.setStorageSync('goodsList',[])
   },
 
   onShow (e) {
