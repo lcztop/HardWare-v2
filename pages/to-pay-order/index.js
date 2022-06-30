@@ -42,12 +42,12 @@ Page({
     couponAmount: 0, //优惠券金额
     curCoupon: null, // 当前选择使用的优惠券
     curCouponShowText: '请选择使用优惠券', // 当前选择使用的优惠券
-    peisongType: 'kd', // 配送方式 kd,zq 分别表示快递/到店自取
+    peisongType: 'zq', // 配送方式 kd,zq 分别表示快递/到店自取
     remark: '',
     shopIndex: -1,
     pageIsEnd: false,
 
-
+    totalPrice:0,  //总价
     bindMobileStatus: 1, // 0 未判断 1 已绑定手机号码 2 未绑定手机号码
     userScore: 0, // 用户可用积分
     deductionScore: '0', // 本次交易抵扣的积分数
@@ -81,6 +81,7 @@ Page({
     cardId: '0' // 使用的次卡ID
   },
   onShow() {
+    
     if (this.data.pageIsEnd) {
       return
     }
@@ -102,62 +103,74 @@ Page({
     let goodsList = []
     let shopList = []
     const token = wx.getStorageSync('token')
+
+    goodsList = wx.getStorageSync('goodsList')
+    shopList = [
+      {
+        'id': 0,
+        'name': '全部'
+      }
+    ]
     //立即购买下单
-    if ("buyNow" == this.data.orderType) {
-      var buyNowInfoMem = wx.getStorageSync('buyNowInfo');
-      this.data.kjId = buyNowInfoMem.kjId;
-      if (buyNowInfoMem && buyNowInfoMem.shopList) {
-        goodsList = buyNowInfoMem.shopList
-      }
-    } else {
+    // if ("buyNow" == this.data.orderType) {
+    //   var buyNowInfoMem = wx.getStorageSync('buyNowInfo');
+    //   this.data.kjId = buyNowInfoMem.kjId;
+    //   if (buyNowInfoMem && buyNowInfoMem.shopList) {
+    //     goodsList = buyNowInfoMem.shopList
+    //   }
+    // } else {
       //购物车下单
-      if (this.data.shopCarType == 0) {//自营购物车
-        var res = await WXAPI.shippingCarInfo(token)
-        shopList = res.data.shopList
-      } else if (this.data.shopCarType == 1) {//云货架购物车
-        var res = await WXAPI.jdvopCartInfo(token)
-        shopList = [{
-          id: 0,
-          name: '其他',
-          hasNoCoupons: true,
-          serviceDistance: 99999999
-        }]
-      }
-      if (res.code == 0) {
-        goodsList = res.data.items.filter(ele => {
-          return ele.selected
-        })
-        const shopIds = []
-        goodsList.forEach(ele => {
-          if (this.data.shopCarType == 1) {
-            ele.shopId = 0
-          }
-          shopIds.push(ele.shopId)
-        })
-        shopList = shopList.filter(ele => {
-          return shopIds.includes(ele.id)
-        })
-      }
-    }
-    shopList.forEach(ele => {
-      ele.hasNoCoupons = true
-    })
+      // if (this.data.shopCarType == 0) {//自营购物车
+      //   var res = await WXAPI.shippingCarInfo(token)
+      //   shopList = res.data.shopList
+      // } else if (this.data.shopCarType == 1) {//云货架购物车
+      //   var res = await WXAPI.jdvopCartInfo(token)
+      //   shopList = [{
+      //     id: 0,
+      //     name: '其他',
+      //     hasNoCoupons: true,
+      //     serviceDistance: 99999999
+      //   }]
+      // }
+    //   if (res.code == 0) {
+    //     goodsList = res.data.items.filter(ele => {
+    //       return ele.selected
+    //     })
+    //     const shopIds = []
+    //     goodsList.forEach(ele => {
+    //       if (this.data.shopCarType == 1) {
+    //         ele.shopId = 0
+    //       }
+    //       shopIds.push(ele.shopId)
+    //     })
+    //     shopList = shopList.filter(ele => {
+    //       return shopIds.includes(ele.id)
+    //     })
+    //   }
+    // }
+    // shopList.forEach(ele => {
+    //   ele.hasNoCoupons = true
+    // })
     this.setData({
       shopList,
       goodsList,
       peisongType: this.data.peisongType
     });
     this.initShippingAddress()
-    this.userAmount()
+    // this.userAmount()
   },
 
   onLoad(e) {
+    console.log(e)
     const nowDate = new Date();
     let _data = {
       isNeedLogistics: 1,
       dateStart: nowDate.format('yyyy-MM-dd h:m:s'),
       orderPeriod_open: wx.getStorageSync('orderPeriod_open'),
       order_pay_user_balance: wx.getStorageSync('order_pay_user_balance')
+    }
+    if(e.totalPrice){
+      _data.totalPrice = e.totalPrice
     }
     if (e.orderType) {
       _data.orderType = e.orderType
@@ -172,16 +185,16 @@ Page({
     this.getUserApiInfo()
     this.cardMyList()
   },
-  async userAmount() {
-    const res = await WXAPI.userAmount(wx.getStorageSync('token'))
-    const order_pay_user_balance = wx.getStorageSync('order_pay_user_balance')
-    if (res.code == 0) {
-      this.setData({
-        balance: order_pay_user_balance == '1' ? res.data.balance : 0,
-        userScore: res.data.score
-      })
-    }
-  },
+  // async userAmount() {
+  //   const res = await WXAPI.userAmount(wx.getStorageSync('token'))
+  //   const order_pay_user_balance = wx.getStorageSync('order_pay_user_balance')
+  //   if (res.code == 0) {
+  //     this.setData({
+  //       balance: order_pay_user_balance == '1' ? res.data.balance : 0,
+  //       userScore: res.data.score
+  //     })
+  //   }
+  // },
   getDistrictId: function (obj, aaa) {
     if (!obj) {
       return "";
@@ -711,17 +724,17 @@ Page({
     }
   },
   async initShippingAddress() {
-    const res = await WXAPI.defaultAddress(wx.getStorageSync('token'))
-    if (res.code == 0) {
-      this.setData({
-        curAddressData: res.data.info
-      });
-    } else {
-      this.setData({
-        curAddressData: null
-      });
-    }
-    this.processYunfei();
+    // const res = await WXAPI.defaultAddress(wx.getStorageSync('token'))
+    // if (res.code == 0) {
+    //   this.setData({
+    //     curAddressData: res.data.info
+    //   });
+    // } else {
+    //   this.setData({
+    //     curAddressData: null
+    //   });
+    // }
+    // this.processYunfei();
   },
   processYunfei() {
     var goodsList = this.data.goodsList

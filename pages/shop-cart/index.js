@@ -10,6 +10,7 @@ Page({
     saveHidden: true,
     allSelect: true,
     delBtnWidth: 120, //删除按钮宽度单位（rpx）
+    shippingCarInfo:[]
   },
 
   //获取元素自适应后的实际宽度
@@ -175,7 +176,6 @@ Page({
   async jiaBtnTap(e) {
     const index = e.currentTarget.dataset.index;
     // const item = this.data.shippingCarInfo.items[index]
-  
     let goodsList = wx.getStorageSync('goodsList')
     goodsList[index].number++
     wx.setStorageSync('goodsList', goodsList)

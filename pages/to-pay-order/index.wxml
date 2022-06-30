@@ -16,9 +16,9 @@
         wx:for="{{goodsList}}" wx:key="index"
         wx:if="{{ item.shopId == shop.id }}"
         num="{{item.number}}"
-        price="{{item.price}}"
+        price="{{item.retailPrice}}"
         title="{{item.name}}"
-        thumb="{{ item.pic }}"
+        thumb="/images/face.png"
         centered
         >
         <view slot="desc">
@@ -69,9 +69,9 @@
       <van-cell wx:if="{{shopCarType == 0 && isNeedLogistics > 0}}" title="配送方式">
         <view slot="">
           <radio-group bindchange="radioChange">
-            <label class="radio">
+            <!-- <label class="radio">
               <radio value="kd" checked="{{peisongType == 'kd'}}" /> 快递
-            </label>
+            </label> -->
             <label class="radio">
               <radio value="zq" checked="{{peisongType == 'zq'}}" /> 到店自取
             </label>
@@ -233,7 +233,7 @@
   </van-cell-group>
   <view class="bottom-box"></view>
   <van-submit-bar
-    price="{{ allGoodsAndYunPrice*100 }}"
+    price="{{ totalPrice*100 }}"
     suffix-label="{{ totalScoreToPay ? '+' + totalScoreToPay + ' 积分' : '' }}"
     button-text="提交订单"
     loading="{{ btnLoading }}"
