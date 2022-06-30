@@ -52,11 +52,30 @@ Page({
     // } else if (this.data.shopCarType == 1) { //云货架购物车
     //   var res = await WXAPI.jdvopCartInfo(token)
     // }
-    var res = wx.getStorageSync('goodsList')
+    // console.log(res)
+
+    // 建立商品数据适应格式
+    let res = {
+      items:[],
+      goodsStatus: [],
+      price: 0,
+      score: 0,
+      shopList: [
+        {
+          'id': 0,
+          'name': '全部'
+        }
+      ]
+    }
+    res.items = wx.getStorageSync('goodsList')
+    console.log(res)
+    for(var i = 0; i<res.items.length ; i++){
+      res.price += (res.items[i].retailPrice)*(res.items[i].number)
+    }
     this.setData({
-      shippingCarInfo: res
+      shippingCarInfo: res,
     })
-    console.log('123')
+    console.log('shippingCarInfo')
     console.log(this.data.shippingCarInfo)
     // if (res.code == 0) {
     //   if (this.data.shopCarType == 0) //自营商品
@@ -126,66 +145,78 @@ Page({
       })
     }
   },
-  async delItem(e) {
-    const key = e.currentTarget.dataset.key
-    this.delItemDone(key)
-  },
-  async delItemDone(key) {
-    const token = wx.getStorageSync('token')
-    if(this.data.shopCarType == 0){
-      var res = await WXAPI.shippingCarInfoRemoveItem(token, key)
-    }
-    if(this.data.shopCarType == 1){
-      var res = await WXAPI.jdvopCartRemove(token, key)
-    }
-    if (res.code != 0 && res.code != 700) {
-      wx.showToast({
-        title: res.msg,
-        icon: 'none'
-      })
-    } else {
-      this.shippingCarInfo()
-      TOOLS.showTabBarBadge()
-    }
+  // async delItem(e) {
+  //   const key = e.currentTarget.dataset
+  //   this.delItemDone(item)
+  // },
+  async delItemDone(index) {
+    let goodsList = wx.getStorageSync('goodsList')
+    goodsList.splice(index, 1)
+    wx.setStorageSync('goodsList', goodsList)
+    this.shippingCarInfo()
+    TOOLS.showTabBarBadge()
+    // const token = wx.getStorageSync('token')
+    // if(this.data.shopCarType == 0){
+    //   var res = await WXAPI.shippingCarInfoRemoveItem(token, key)
+    // }
+    // if(this.data.shopCarType == 1){
+    //   var res = await WXAPI.jdvopCartRemove(token, key)
+    // }
+    // if (res.code != 0 && res.code != 700) {
+    //   wx.showToast({
+    //     title: res.msg,
+    //     icon: 'none'
+    //   })
+    // } else {
+      // this.shippingCarInfo()
+      // TOOLS.showTabBarBadge()
+    // }
   },
   async jiaBtnTap(e) {
     const index = e.currentTarget.dataset.index;
-    const item = this.data.shippingCarInfo.items[index]
-    const number = item.number + 1
-    const token = wx.getStorageSync('token')
-    if(this.data.shopCarType == 0){
-      var res = await WXAPI.shippingCarInfoModifyNumber(token, item.key, number)
-    }
-    else if(this.data.shopCarType == 1){
-      var res = await WXAPI.jdvopCartModifyNumber(token, item.key, number)
-    }    
+    // const item = this.data.shippingCarInfo.items[index]
+  
+    let goodsList = wx.getStorageSync('goodsList')
+    goodsList[index].number++
+    wx.setStorageSync('goodsList', goodsList)
+    // const token = wx.getStorageSync('token')
+    // if(this.data.shopCarType == 0){
+    //   var res = await WXAPI.shippingCarInfoModifyNumber(token, item.key, number)
+    // }
+    // else if(this.data.shopCarType == 1){
+    //   var res = await WXAPI.jdvopCartModifyNumber(token, item.key, number)
+    // }    
     this.shippingCarInfo()
   },
   async jianBtnTap(e) {
     const index = e.currentTarget.dataset.index;
     const item = this.data.shippingCarInfo.items[index]
     const number = item.number - 1
+    console.log(index)
+    console.log(item)
     if (number <= 0) {
       // 弹出删除确认
       wx.showModal({
         content: '确定要删除该商品吗？',
         success: (res) => {
           if (res.confirm) {
-            this.delItemDone(item.key)
+            this.delItemDone(index)
           }
         }
       })
       return
     }
-    const token = wx.getStorageSync('token')
-    if(this.data.shopCarType == 0)
-    {
-      var res = await WXAPI.shippingCarInfoModifyNumber(token, item.key, number)  
-    }
-    if(this.data.shopCarType == 1)
-    {
-      var res = await WXAPI.jdvopCartModifyNumber(token, item.key, number)  
-    }
+    let goodsList = wx.getStorageSync('goodsList')
+    goodsList[index].number--
+    wx.setStorageSync('goodsList', goodsList)
+    // if(this.data.shopCarType == 0)
+    // {
+    //   var res = await WXAPI.shippingCarInfoModifyNumber(token, item.key, number)  
+    // }
+    // if(this.data.shopCarType == 1)
+    // {
+    //   var res = await WXAPI.jdvopCartModifyNumber(token, item.key, number)  
+    // }
     this.shippingCarInfo()
   },
   changeCarNumber(e) {

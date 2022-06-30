@@ -17,7 +17,7 @@
               <radio checked="{{ item.selected }}" bindtap="radioClick" data-index="{{index}}" />
             </view>
             <view class="img-box">
-              <image mode="aspectFill" src="{{item.pic}}" class="img" />
+              <image mode="aspectFill" src="/images/face.png" class="img" />
             </view>
             <view class="text-box">
               <view class="goods-title">{{item.name}}</view>
@@ -29,7 +29,7 @@
                   {{option.pname}}:{{option.name}}
                 </block>
               </view>
-              <view class="goods-price">¥ {{item.price}}</view>
+              <view class="goods-price">¥ {{item.retailPrice}}</view>
               <view class="buy-num">
                 <view class="jian-btn" catchtap="jianBtnTap" data-index="{{index}}">-</view>
                 <input type="number" value="{{item.number}}" data-key="{{item.key}}" bindinput="changeCarNumber" />

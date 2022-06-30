@@ -270,9 +270,12 @@ Page({
   },
   async addShopCarDone(options) {
     // const res = await WXAPI.shippingCarInfoAddItem(wx.getStorageSync('token'), options.goodsId, options.buyNumber, options.sku)
-    console.log('1231231231')
-    console.log(options)
+ 
+    // 为原数据增加属性
     options.goods.number = 1
+    options.goods.selected = true
+    options.goods.shopId = 0
+    
     let goodsList = wx.getStorageSync('goodsList')
     for(let i = 0; i<goodsList.length; i++){
       if(goodsList[i].id == options.goods.id){
