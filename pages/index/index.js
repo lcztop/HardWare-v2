@@ -90,6 +90,38 @@ Page({
       })
     }
   },
+  async getCategories() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-category',
+        method: 'GET',
+        success: function (res) {
+          return resolve(res)
+        },
+        fail: function (res) {
+          return resolve(res)
+        }
+      })
+    })
+  },
+  async getGoodsListReq(categoryID) {
+    var token = wx.getStorageSync('homehomeToken')
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-item-by-category/${categoryID}`,
+        header: {
+          "authorization":"bearer "+token
+        },
+        method: 'GET',
+        success: function (res) {
+          return resolve(res)
+        },
+        fail: function (res) {
+          return resolve(res)
+        }
+      })
+    })
+  },
   tapBanner: function(e) {
     const url = e.currentTarget.dataset.url
     if (url) {
@@ -143,15 +175,15 @@ Page({
     this.categories()
     this.cmsCategories()
     // https://www.yuque.com/apifm/nu0f75/wg5t98
-    WXAPI.goodsv2({
-      recommendStatus: 1
-    }).then(res => {
-      if (res.code === 0){
-        that.setData({
-          goodsRecommend: res.data.result
-        })
-      }      
-    })
+    // WXAPI.goodsv2({
+    //   recommendStatus: 1
+    // }).then(res => {
+    //   if (res.code === 0){
+    //     that.setData({
+    //       goodsRecommend: res.data.result
+    //     })
+    //   }      
+    // })
     that.getCoupons()
     that.getNotice()
     that.kanjiaGoods()
@@ -163,6 +195,7 @@ Page({
       this.readConfigVal()
     }
   },
+
   readConfigVal() {
     wx.setNavigationBarTitle({
       title: wx.getStorageSync('mallName')
@@ -261,6 +294,7 @@ Page({
   },
   async categories(){
     const res = await WXAPI.goodsCategory()
+    
     let categories = [];
     let categoriesTop5 = [];
     if (res.code == 0) {
@@ -284,41 +318,48 @@ Page({
     this.getGoodsList(0);
   },
   async getGoodsList(categoryId, append) {
-    if (categoryId == 0) {
-      categoryId = "";
-    }
-    wx.showLoading({
-      "mask": true
-    })
-    // https://www.yuque.com/apifm/nu0f75/wg5t98
-    const res = await WXAPI.goodsv2({
-      categoryId: categoryId,
-      page: this.data.curPage,
-      pageSize: this.data.pageSize
-    })
-    console.log(res)
-    wx.hideLoading()
-    if (res.code == 404 || res.code == 700) {
-      let newData = {
-        loadingMoreHidden: false
-      }
-      if (!append) {
-        newData.goods = []
-      }
-      this.setData(newData);
-      return
-    }
-    let goods = [];
-    if (append) {
-      goods = this.data.goods
-    }
-    for (var i = 0; i < res.data.result.length; i++) {
-      goods.push(res.data.result[i]);
-    }
+    const res1 = await this.getCategories()
+    console.log(res1)
+    let goodsRecommend = await this.getGoodsListReq(res1.data[0].id)
+    console.log(goodsRecommend)
     this.setData({
-      loadingMoreHidden: true,
-      goods: goods,
-    });
+      goodsRecommend: goodsRecommend.data.slice(0,30)
+    })
+    // if (categoryId == 0) {
+    //   categoryId = "";
+    // }
+    // wx.showLoading({
+    //   "mask": true
+    // })
+    // // https://www.yuque.com/apifm/nu0f75/wg5t98
+    // const res = await WXAPI.goodsv2({
+    //   categoryId: categoryId,
+    //   page: this.data.curPage,
+    //   pageSize: this.data.pageSize
+    // })
+    // console.log(res)
+    // wx.hideLoading()
+    // if (res.code == 404 || res.code == 700) {
+    //   let newData = {
+    //     loadingMoreHidden: false
+    //   }
+    //   if (!append) {
+    //     newData.goods = []
+    //   }
+    //   this.setData(newData);
+    //   return
+    // }
+    // let goods = [];
+    // if (append) {
+    //   goods = this.data.goods
+    // }
+    // for (var i = 0; i < res.data.result.length; i++) {
+    //   goods.push(res.data.result[i]);
+    // }
+    // this.setData({
+    //   loadingMoreHidden: true,
+    //   goods: goods,
+    // });
   },
   getCoupons: function() {
     var that = this;

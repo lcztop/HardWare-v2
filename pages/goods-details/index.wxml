@@ -9,12 +9,12 @@
   <scroll-view class="scroll-container" scroll-into-view="{{toView}}" scroll-y="true" scroll-with-animation="true" bindscroll="bindscroll">
     <view class="swiper-container" id="swiper-container">
       <swiper class="swiper_box" indicator-dots="true" indicator-active-color="#fff"
-        autoplay="{{!goodsDetail.basicInfo.videoId}}" circular>
-        <swiper-item wx:if="{{goodsDetail.basicInfo.videoId}}">
-          <video src="{{videoMp4Src}}" autoplay="true" loop="true" style='width:100%;height:100%;'></video>
-        </swiper-item>
+        autoplay="/images/face.png" circular>
+        <!-- <swiper-item wx:if="{{goodsDetail.basicInfo.videoId}}">
+          <video src="/images/face.png" autoplay="true" loop="true" style='width:100%;height:100%;'></video>
+        </swiper-item> -->
         <swiper-item wx:for="{{goodsDetail.pics}}" wx:key="id">
-          <image src="{{item.pic}}" class="slide-image" mode="aspectFill" lazy-load="true" />
+          <image src="/images/face.png" class="slide-image" mode="aspectFill" lazy-load="true" />
         </swiper-item>
       </swiper>
     </view>
@@ -32,13 +32,13 @@
             <view class="icon-title">分享</view>
             <button open-type='share'></button>
           </view>
-          <view class='item' bindtap="drawSharePic">
+          <!-- <view class='item' bindtap="drawSharePic">
             <van-icon name="qr" size="24px"/>
             <view class="icon-title">二维码</view>            
-          </view>
+          </view> -->
         </view>
       </view>
-      <view class="goods-title">{{goodsDetail.basicInfo.name}}</view>
+      <view class="goods-title">{{goodsDetail.name}}</view>
       <view class="characteristic">{{goodsDetail.basicInfo.characteristic}}</view>
       <view class="goods-share" wx:if="{{goodsDetail.basicInfo.commissionType == 1}}">分享有赏，好友下单后可得
         {{goodsDetail.basicInfo.commission}} 积分奖励</view>
@@ -134,8 +134,8 @@
     <view wx:if="{{shopSubdetail}}" class="shop-container">
       <image mode="aspectFill" src="{{shopSubdetail.info.pic}}"></image>
       <view class="info">
-        <view class="title">{{shopSubdetail.info.name}}</view>
-        <view class="address">{{shopSubdetail.info.address}}</view>
+        <view class="title">{{shopSubdetail.name}}</view>
+        <view class="address">{{shopSubdetail.address}}</view>
       </view>
     </view>
     <view class="goods-des-info" id="goods-des-info">

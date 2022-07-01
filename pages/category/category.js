@@ -48,10 +48,14 @@ Page({
       })
     })
   },
-  async getGoodsList2(categoryID) {
+  async getGoodsListReq(categoryID) {
+    var token = wx.getStorageSync('homehomeToken')
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-sku/${categoryID}`,
+        url: `https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/get-item-by-category/${categoryID}`,
+        header: {
+          "authorization":"bearer "+token
+        },
         method: 'GET',
         success: function (res) {
           return resolve(res)
@@ -122,49 +126,14 @@ Page({
     } else if (this.data.categorySelected.id) {
       categoryID = this.data.categorySelected.id
     }
-    // https://www.yuque.com/apifm/nu0f75/wg5t98
-    // const res = await WXAPI.goodsv2({
-    //   categoryId,
-    //   page: this.data.page,
-    //   pageSize: this.data.pageSize
-    // })
 
     // console.log(categoryID)
-    let res = await this.getGoodsList2(categoryID)
+    let res = await this.getGoodsListReq(categoryID)
     // console.log(res)
     this.setData({
           currentGoods: res.data.slice(0,1)
         })
     wx.hideLoading()
-    // if (res.statusCode == 200) {
-    //   if (this.data.page == 1) {
-    //     this.setData({
-    //       currentGoods: null
-    //     });
-    //   } else {
-    //     wx.showToast({
-    //       title: '没有更多了',
-    //       icon: 'none'
-    //     })
-    //   }
-    //   return
-    // }
-    // if (res.code != 0) {
-    //   wx.showToast({
-    //     title: res.msg,
-    //     icon: 'none'
-    //   })
-    //   return
-    // }
-    // if (res.data.page == 1) {
-    //   this.setData({
-    //     currentGoods: res.data.slice(0,9)
-    //   })
-    // } else {
-    //   this.setData({
-    //     currentGoods: this.data.currentGoods.concat(res.data.slice(0,9))
-    //   })
-    // }
   },
   async onCategoryClick(e) {
     const idx = e.target.dataset.idx
@@ -276,6 +245,7 @@ Page({
     options.goods.selected = true
     options.goods.shopId = 0
     
+
     let goodsList = wx.getStorageSync('goodsList')
     for(let i = 0; i<goodsList.length; i++){
       if(goodsList[i].id == options.goods.id){

@@ -14,7 +14,7 @@
     <view class="goods-info vcell">
       <view class="goods-info-top-container">
         <view class="goods-profile">
-          <view class="p"><text>¥</text> {{goodsDetail.basicInfo.minPrice}}</view>
+          <view class="p"><text>¥ssdsd</text> {{goodsDetail.basicInfo.minPrice}}</view>
           <view wx:if="{{goodsDetail.basicInfo.originalPrice && goodsDetail.basicInfo.originalPrice > 0}}" class="goods-price"
             style='color:#aaa;text-decoration:line-through;padding: 15rpx 0rpx 0rpx 15rpx;'><text>¥</text>
             {{goodsDetail.basicInfo.originalPrice}}</view>

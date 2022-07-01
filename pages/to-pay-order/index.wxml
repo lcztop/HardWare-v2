@@ -9,8 +9,8 @@
     </view>
   </view>
 </block>
-<block wx:if="{{ bindMobileStatus == 1 }}">
-  <block wx:if="{{ orderType != 'buyNow' }}"> <!-- 购物车 -->
+<block wx:if="true">
+  <block wx:if="true"> <!-- 购物车 -->
     <van-cell-group wx:for="{{shopList}}" wx:for-item="shop" wx:for-index="shopIndex" wx:key="id" title="{{ shop.name }}">
       <van-card
         wx:for="{{goodsList}}" wx:key="index"
@@ -31,7 +31,7 @@
           </block>
         </view>
       </van-card>
-      <view class="peisong-way" hidden="{{ shop.hasNoCoupons }}">
+      <!-- <view class="peisong-way" hidden="{{ shop.hasNoCoupons }}">
         <view class="row-box" style="border-bottom:none;">
           <view class="row-label t">使用优惠券</view>
         </view>
@@ -41,16 +41,16 @@
             <image class="next" src="/images/icon/next.png"></image>
           </view>
         </picker>
-      </view>
+      </view> -->
     </van-cell-group>
   </block>
   <block wx:else> <!-- 立即购买 -->
     <van-card
       wx:for="{{goodsList}}" wx:key="index"
-      num="{{item.number}}"
-      price="{{item.price}}"
+      num="1"
+      price="{{item.price6}}"
       title="{{item.name}}"
-      thumb="{{ item.pic }}"
+      thumb="/images/face"
       centered
       >
       <view slot="desc">

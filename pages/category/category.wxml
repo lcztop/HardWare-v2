@@ -63,11 +63,11 @@
     </wxs>
     <van-card
       wx:for="{{currentGoods}}" wx:key="id"
-      price="{{item.minPrice}}"
+      price="{{item.retailPrice}}"
       desc="{{item.numberSells ? '已售' + item.numberSells : ''}}"
       tag="{{item.gotScore ? item.gotScore + '积分' : ''}}"
       title="{{item.name}}"
-      thumb="{{item.pic}}"
+      thumb="/images/face.png"
       thumb-link="{{ goodsDetailPage.url(item) }}"
     >
       <view class="goods-btn" slot="footer">
