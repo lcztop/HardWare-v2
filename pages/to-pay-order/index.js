@@ -298,7 +298,7 @@ Page({
   },
   async createOrderNew() {
     return new Promise((resolve, reject) => {
-      var goodsList = wx.getStorageSync('goodsList')
+      var goodsList = this.data.goodsList
       var token = wx.getStorageSync('homehomeToken')
       wx.request({
         url: 'https://service-d1t4upj7-1304578354.sh.apigw.tencentcs.com/release/homehome/create-order',
@@ -320,7 +320,7 @@ Page({
   },
   async createOrderReq(e){
     const postData = {
-      token: wx.getStorageSync('homehomToken'),
+      token: wx.getStorageSync('homehomeToken'),
       goodsJsonStr: this.data.goodsJsonStr,
       remark: this.data.remark,
       peisongType: this.data.peisongType,
