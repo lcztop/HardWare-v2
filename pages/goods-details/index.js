@@ -539,46 +539,45 @@ Page({
    * 加入购物车
    */
   async addShopCar() {
-    if (this.data.goodsDetail.properties && !this.data.canSubmit) {
-      if (!this.data.canSubmit) {
-        wx.showToast({
-          title: '请选择规格',
-          icon: 'none'
-        })
-      }
-      this.bindGuiGeTap()
-      return
-    }
-    const goodsAddition = []
-    if (this.data.goodsAddition) {
-      let canSubmit = true
-      this.data.goodsAddition.forEach(ele => {
-        if (ele.required) {
-          const a = ele.items.find(item => {
-            return item.active
-          })
-          if (!a) {
-            canSubmit = false
-          }
-        }
-        ele.items.forEach(item => {
-          if (item.active) {
-            goodsAddition.push({
-              id: item.id,
-              pid: item.pid
-            })
-          }
-        })
-      })
-      if (!canSubmit) {
-        wx.showToast({
-          title: '请选择配件',
-          icon: 'none'
-        })
-        this.bindGuiGeTap()
-        return
-      }
-    }
+    // if (this.data.goodsDetail.properties && !this.data.canSubmit) {
+    //   if (!this.data.canSubmit) {
+    //     wx.showToast({
+    //       title: '请选择规格',
+    //       icon: 'none'
+    //     })
+    //   }
+    //   this.bindGuiGeTap()
+    //   return
+    // }
+    // if (this.data.goodsAddition) {
+    //   let canSubmit = true
+    //   this.data.goodsAddition.forEach(ele => {
+    //     if (ele.required) {
+    //       const a = ele.items.find(item => {
+    //         return item.active
+    //       })
+    //       if (!a) {
+    //         canSubmit = false
+    //       }
+    //     }
+    //     ele.items.forEach(item => {
+    //       if (item.active) {
+    //         goodsAddition.push({
+    //           id: item.id,
+    //           pid: item.pid
+    //         })
+    //       }
+    //     })
+    //   })
+    //   if (!canSubmit) {
+    //     wx.showToast({
+    //       title: '请选择配件',
+    //       icon: 'none'
+    //     })
+    //     this.bindGuiGeTap()
+    //     return
+    //   }
+    // }
     if (this.data.buyNumber < 1) {
       wx.showToast({
         title: '请选择购买数量',
@@ -590,31 +589,54 @@ Page({
     if (!isLogined) {
       return
     }
-    const token = wx.getStorageSync('token')
-    const goodsId = this.data.goodsDetail.basicInfo.id
-    const sku = []
-    if (this.data.goodsDetail.properties) {
-      this.data.goodsDetail.properties.forEach(p => {
-        sku.push({
-          optionId: p.id,
-          optionValueId: p.optionValueId
-        })
-      })
-    }
-    const res = await WXAPI.shippingCarInfoAddItem(token, goodsId, this.data.buyNumber, sku, goodsAddition)
-    if (res.code != 0) {
-      wx.showToast({
-        title: res.msg,
-        icon: 'none'
-      })
-      return
-    }
+    // const token = wx.getStorageSync('token')
+    // const goodsId = this.data.goodsDetail.basicInfo.id
+    // const sku = []
+    // if (this.data.goodsDetail.properties) {
+    //   this.data.goodsDetail.properties.forEach(p => {
+    //     sku.push({
+    //       optionId: p.id,
+    //       optionValueId: p.optionValueId
+    //     })
+    //   })
+    // }
+    // const res = await WXAPI.shippingCarInfoAddItem(token, goodsId, this.data.buyNumber, sku, goodsAddition)
+    // if (res.code != 0) {
+    //   wx.showToast({
+    //     title: res.msg,
+    //     icon: 'none'
+    //   })
+    //   return
+    // }
+    let options = this.data.goodsDetail
+    console.log(options)
+    options.number = 1
+    options.selected = true
+    options.shopId = 0
+     
+    options.retailPrice = options.price6
 
-    this.closePopupTap();
+    let goodsList = wx.getStorageSync('goodsList')
+    for(let i = 0; i<goodsList.length; i++){
+      if(goodsList[i].id == options.id){
+        goodsList[i].number +=1
+        wx.setStorageSync('goodsList', goodsList)
+        wx.showToast({
+          title: '加入成功',
+          icon: 'success'
+        })
+        wx.showTabBar()
+        TOOLS.showTabBarBadge()
+        return
+      }
+    }
+    goodsList = goodsList.concat(options)
     wx.showToast({
-      title: '加入购物车',
+      title: '加入成功',
       icon: 'success'
     })
+    wx.setStorageSync('goodsList', goodsList) 
+    this.closePopupTap();
     this.shippingCartInfo()
   },
   /**
