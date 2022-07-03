@@ -234,4 +234,15 @@ Page({
       }
     }
   },
+  async renew() {
+    wx.login({
+    success(loginRes) {
+      if (loginRes.code) {
+        console.log(loginRes.code)
+      } else {
+        console.error('登录失败！' + loginRes.errMsg)
+      }
+    }
+  })
+  },
 })

@@ -112,6 +112,8 @@
     <view>
     {{openID}}
     </view>
+    <button bindtap="renew">renew</button>
+  
 
   </van-cell-group>
   
